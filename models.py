@@ -1,5 +1,16 @@
-
 from pydantic import BaseModel, Field, EmailStr
+from enum import Enum
+from decimal import Decimal
+from datetime import datetime
+
+class Currency(str, Enum):
+    USD = "USD"
+    EUR = "EUR"
+    GBP = "GBP"
+
+class TransactionType(str, Enum):
+    DEBIT = "DEBIT"
+    CREDIT = "CREDIT"
 
 class Address(BaseModel):
     street: str
@@ -12,3 +23,10 @@ class User(BaseModel):
     age: int = Field(ge=18, le=120)
     address: Address
     social_security_number: str
+
+class Transaction(BaseModel):
+    currency: Currency
+    amount: Decimal = Field(gt=0)
+    timestamp: datetime
+    transaction_type: TransactionType
+    user_age: int
