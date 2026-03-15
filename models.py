@@ -22,7 +22,7 @@ class User(BaseModel):
     email: EmailStr
     age: int = Field(ge=18, le=120)
     address: Address
-    social_security_number: str
+    social_security_number: str = Field(exclude=True)
 
 class Transaction(BaseModel):
     currency: Currency
@@ -30,3 +30,11 @@ class Transaction(BaseModel):
     timestamp: datetime
     transaction_type: TransactionType
     user_age: int
+
+    @computed_field
+    def risk_score(self) -> str:
+        if self.amount > 10000 or self.user_age < 21:
+            return "High"
+        if self.amount > 5000:
+            return "Medium"
+        return "Low"
