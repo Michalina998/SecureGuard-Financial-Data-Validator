@@ -4,12 +4,12 @@ from enum import Enum
 from decimal import Decimal
 from datetime import datetime, date
 from uuid import UUID
+from typing import List
 import re
 
 def to_camel(string: str) -> str:
     parts = string.split("_")
     return parts[0] + "".join(word.capitalize() for word in parts[1:])
-
 
 class Currency(str, Enum):
     USD = "USD"
@@ -57,7 +57,6 @@ class User(BaseModel):
                 raise ValueError("ID must be UUID or ACC-XXXX format")
         return v
 
-
 class Transaction(BaseModel):
     currency: Currency
     amount: Decimal = Field(gt=0)
@@ -90,3 +89,9 @@ class InsurancePolicy(BaseModel):
         if (self.end_date - self.start_date).days < 30:
             raise ValueError("Policy must last at least 30 days")
         return self
+
+class Account(BaseModel):
+    transactions: List[Transaction]
+
+    def total_portfolio_value(self):
+        return sum(t.amount for t in self.transactions)
