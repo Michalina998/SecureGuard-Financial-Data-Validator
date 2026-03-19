@@ -39,6 +39,6 @@ Contains unit tests using `unittest` that check:
 - ZIP code validation.
 
 ## Installation
-pip install pydantic
+pip install -r "requirements.txt"
 
 ## by Michalina and Marcelina Górka
